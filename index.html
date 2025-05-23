@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+ <div class="container py-4">
+        <div class="header-title">
+            <h1 class="mb-2">BSCpE Classroom Officer Elections</h1>
+            <p class="mb-0">Bachelor of Science in Computer Engineering</p>
+        </div>
+
+        <!-- Login Page -->
+        <div id="loginPage" class="page active">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Login to Vote</h3>
+                </div>
+                <div class="card-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="loginEmail" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" id="loginPassword" required class="form-control">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">Log In</button>
+                            <button type="button" class="btn btn-outline-primary" onclick="showPage('signupPage')">Create New Account</button>
+                        </div>
+                    </form>
+                    <div id="loginError" class="alert alert-danger mt-3" style="display: none;"></div>
+                    
+                    <!-- Demo Credentials -->
+                    <div class="mt-4 p-3" style="background: rgba(255,255,255,0.8); border-radius: 8px;">
+                        <h6 class="text-muted">Demo Credentials:</h6>
+                        <small class="text-muted">
+                            <strong>Admin:</strong> admin@bscpe.edu / admin123<br>
+                            <strong>Student:</strong> student@bscpe.edu / student123
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signupPage" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Create Account</h3>
+                </div>
+                <div class="card-body">
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="signupEmail" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" id="signupPassword" required class="form-control" minlength="6">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Student ID Number</label>
+                            <input type="text" id="signupId" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="signupUsername" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Year Level</label>
+                            <select id="signupYear" required class="form-control">
+                                <option value="">Select Year Level</option>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                            </select>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="showPage('loginPage')">Back to Login</button>
+                        </div>
+                    </form>
+                    <div id="signupError" class="alert alert-danger mt-3" style="display: none;"></div>
+                    <div id="signupSuccess" class="alert alert-success mt-3" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Page -->
+        <div id="adminPage" class="page">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Admin Panel - Candidate Management</h3>
+                    <div>
+                        <button type="button" class="btn btn-warning btn-sm me-2" onclick="showDatabaseModal()">View Database</button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Year Level Tabs -->
+                    <ul class="nav nav-pills" id="yearTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="year1-tab" data-year="1" type="button">1st Year</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="year2-tab" data-year="2" type="button">2nd Year</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="year3-tab" data-year="3" type="button">3rd Year</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="year4-tab" data-year="4" type="button">4th Year</button>
+                        </li>
+                    </ul>
+
+                    <!-- Add Candidate Form -->
+                    <div class="admin-section">
+                        <h5>Add New Candidate</h5>
+                        <form id="addCandidateForm">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select id="candidatePosition" required class="form-control">
+                                        <option value="">Select Position</option>
+                                        <option value="President">President</option>
+                                        <option value="Vice President Internal">Vice President Internal</option>
+                                        <option value="Vice President External">Vice President External</option>
+                                        <option value="Secretary">Secretary</option>
+                                        <option value="Treasurer">Treasurer</option>
+                                        <option value="Auditor">Auditor</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="candidateName" required class="form-control" placeholder="Candidate Name">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Candidates Display -->
+                    <div id="candidatesDisplay">
+                        <!-- Candidates will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voting Page -->
+        <div id="votePage" class="page">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Cast Your Vote</h3>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="logout()">Logout</button>
+                </div>
+                <div class="card-body">
+                    <form id="voteForm">
+                        <div class="mb-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Section</label>
+                                    <select id="voteSection" required class="form-control">
+                                        <option value="">Select Section</option>
+                                        <option value="A">Section A</option>
+                                        <option value="B">Section B</option>
+                                        <option value="C">Section C</option>
+                                        <option value="D">Section D</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Year Level</label>
+                                    <input type="text" id="voterYear" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="candidatesContainer"></div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Submit Vote</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Receipt Page -->
+        <div id="receiptPage" class="page">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Voting Receipt</h3>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="logout()">Logout</button>
+                </div>
+                <div class="card-body">
+                    <div id="receiptContent" class="receipt-section">
+                        <!-- Receipt content will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Modal -->
+    <div class="modal fade" id="databaseModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Database Viewer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="databaseContent">
+                        <!-- Database content will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="refreshDatabase()">Refresh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
