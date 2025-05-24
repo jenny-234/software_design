@@ -41,18 +41,25 @@
             }
 
             createUser(email, userData) {
+                console.log('Creating user:', email, userData); // Debug log
                 if (this.users[email]) {
                     throw new Error('Email already registered');
                 }
                 this.users[email] = { ...userData, role: 'student' };
+                console.log('User created successfully. Total users:', Object.keys(this.users).length); // Debug log
+                console.log('All users:', Object.keys(this.users)); // Debug log
                 return true;
             }
 
             authenticateUser(email, password) {
+                console.log('Attempting login for:', email); // Debug log
+                console.log('Available users:', Object.keys(this.users)); // Debug log
                 const user = this.users[email];
                 if (user && user.password === password) {
+                    console.log('Login successful for:', email); // Debug log
                     return user;
                 }
+                console.log('Login failed for:', email, 'User exists:', !!user, 'Password match:', user ? user.password === password : 'N/A'); // Debug log
                 return null;
             }
 
